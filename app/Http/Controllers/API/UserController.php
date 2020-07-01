@@ -63,10 +63,13 @@ public function CreateUser(Request $request)
         $user = User::create($userArray);
     
         if($user) {
+            $data = [
+                'name'         => $request->name,
+                'email'        => $request->email,
+            ];
           return response()->json([
-            'name'         => $request->name,
-            'email'        => $request->email,
-            'access_token' => $this->apiToken,
+                'data' => $data,
+                'message' => 'user created Success fully'
           ]);
         } else {
           return response()->json([
