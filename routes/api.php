@@ -19,5 +19,9 @@ Route::post('/signup','API\AuthController@CrudRegister');
 Route::post('/login','API\AuthController@CrudLogin');
 
 
+Route::middleware('ApiToken')->group(function () {
 
-Route::middleware('ApiToken')->get('/users', 'API\UserController@index');
+    Route::get('/users', 'API\UserController@index');
+    Route::post('/create-user', 'API\UserController@CreateUser');
+});
+

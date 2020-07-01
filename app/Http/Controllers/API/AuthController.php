@@ -40,8 +40,8 @@ class AuthController extends Controller
       $user = User::where('email',$request->email)->first();
       if($user) {
         if( password_verify($request->password, $user->password) ) {
-          $postArray = ['api_token' => $this->apiToken];
-          $login = User::where('email',$request->email)->update($postArray);
+          $userArray = ['api_token' => $this->apiToken];
+          $login = User::where('email',$request->email)->update($userArray);
           
           if($login) {
             return response()->json([
@@ -78,14 +78,14 @@ class AuthController extends Controller
         'message' => $validator->messages(),
       ]);
     } else {
-      $postArray = [
+      $userArray = [
         'name'      => $request->name,
         'email'     => $request->email,
         'password'  => Hash::make($request->password),
         'api_token' => $this->apiToken
       ];
 
-      $user = User::insert($postArray);
+      $user = User::create($userArray);
   
       if($user) {
         return response()->json([
@@ -108,8 +108,8 @@ class AuthController extends Controller
     $token = $request->header('Authorization');
     $user = User::where('api_token',$token)->first();
     if($user) {
-      $postArray = ['api_token' => null];
-      $logout = User::where('id',$user->id)->update($postArray);
+      $userArray = ['api_token' => null];
+      $logout = User::where('id',$user->id)->update($userArray);
       if($logout) {
         return response()->json([
           'message' => 'User Logged Out',
