@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use DB;
 use App\User;
 use Validator;
@@ -16,7 +18,7 @@ class AuthController extends Controller
   public function __construct()
   {
    
-    $this->apiToken = uniqid(base64_encode(str_random(60)));
+    $this->apiToken = uniqid(base64_encode(str::random(60)));
   }
   /**
    * Client Login
@@ -79,7 +81,7 @@ class AuthController extends Controller
       $postArray = [
         'name'      => $request->name,
         'email'     => $request->email,
-        'password'  => bcrypt($request->password),
+        'password'  => Hash::make($request->password),
         'api_token' => $this->apiToken
       ];
 

@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('api_token')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::post('/signup','API\AuthController@CrudRegister');
+Route::post('/login','API\AuthController@CrudLogin');
+
+
+
+Route::middleware('ApiToken')->get('/user', function (Request $request) {
+    return "accessed";
 });
