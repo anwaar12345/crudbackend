@@ -20,6 +20,4 @@ Route::post('/login','API\AuthController@CrudLogin');
 
 
 
-Route::middleware('ApiToken')->get('/user', function (Request $request) {
-    return "accessed";
-});
+Route::middleware('ApiToken')->get('/users', 'API\UserController@index');
