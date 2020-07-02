@@ -25,5 +25,6 @@ Route::middleware('ApiToken')->group(function () {
     Route::post('/create-user', 'API\UserController@CreateUser');
     Route::get('/edit/{id}', 'API\UserController@GetUserById');
     Route::put('update/{id}','API\UserController@UpdateUser');
+    Route::delete('delete/{id}','API\UserController@UserDelete');
 });
 

@@ -140,13 +140,29 @@ public function UpdateUser(Request $request,$id)
         return $this->sendResponse($userReturn, 'User Updated Successfully.');
       } else {
       return response()->json([
-          'message' => 'Registration failed, please try again.',
+          'message' => 'Failed, please try again.',
         ]);
       }
 
   }
   }
 
+  public function UserDelete($id)
+  {
+  
+    $user =  User::find($id);
+    $user = $user->delete();
 
+    if($user) {
+      return $this->sendResponse($user, 'User Deleted Successfully.');
+    } else {
+    return response()->json([
+        'message' => 'Deletion Failed, please try again.',
+      ]);
+    }
+
+
+
+  }
 
 }
