@@ -23,6 +23,7 @@ Route::middleware('ApiToken')->group(function () {
 
     Route::get('/users', 'API\UserController@index');
     Route::post('/create-user', 'API\UserController@CreateUser');
-    Route::get('/user/{id}', 'API\UserController@GetUserById');
+    Route::get('/edit/{id}', 'API\UserController@GetUserById');
+    Route::put('update/{id}','API\UserController@UpdateUser');
 });
 

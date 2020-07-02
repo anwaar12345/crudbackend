@@ -105,6 +105,10 @@ public function GetUserById($id)
    }
 }
 
+public function UpdateUser(Request $request,$id)
+{
+  dd($id);
+}
 
 
 }
