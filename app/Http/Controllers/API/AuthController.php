@@ -70,7 +70,8 @@ class AuthController extends Controller
     $rules = [
       'name'     => 'required|min:3',
       'email'    => 'required|unique:users,email',
-      'password' => 'required|min:8'
+      'password' => 'required|min:8',
+      'profile' => 'required'
     ];
     $validator = Validator::make($request->all(), $rules);
     if ($validator->fails()) {
@@ -78,27 +79,44 @@ class AuthController extends Controller
         'message' => $validator->messages(),
       ]);
     } else {
+      
+      $file_name =  str_replace(' ','_',$request->name).".".$request->profile->getClientOriginalExtension();
+      if( $file_path = $request->profile->move(public_path().'/images/',$file_name)){
+
+
       $userArray = [
         'name'      => $request->name,
         'email'     => $request->email,
         'password'  => Hash::make($request->password),
-        'api_token' => $this->apiToken
+        'api_token' => $this->apiToken,
+        'profile' => $file_name
       ];
 
+      
+   
+     
       $user = User::create($userArray);
   
+     
+
       if($user) {
         return response()->json([
           'name'         => $request->name,
           'email'        => $request->email,
           'access_token' => $this->apiToken,
+          'profile' => $file_name
         ]);
       } else {
         return response()->json([
           'message' => 'Registration failed, please try again.',
         ]);
       }
+    }else{
+      return response()->json([
+        'message' => 'Image Moving Failed',
+      ]);
     }
+  }
   }
   /**
    * Logout
