@@ -23,17 +23,20 @@ public function index(){
 $users = User::all();
 if($users->count() > 0) {
 
-return response()->json([
-    'data'         => $users,
-    'message' => 'Users Retrieved SuccessFully'
-  ]);
+return $this->sendResponse($users, 'User Retrieved Successfully.');
+
+// return response()->json([
+//     'data'         => $users,
+//     'message' => 'Users Retrieved SuccessFully'
+//   ]);
 
 }else{
 
-    return response()->json([
-        'data' => $users,
-        'message' => 'No User Found'
-        ]);
+  return $this->sendResponse($users, 'no users found');
+    // return response()->json([
+    //     'data' => $users,
+    //     'message' => 'No User Found'
+    //     ]);
 }
 }
 
@@ -43,7 +46,7 @@ public function CreateUser(Request $request)
 
 
     $rules = [
-        'name'     => 'required|min:3',
+        'name'     => 'required',
         'email'    => 'required|unique:users,email',
         'password' => 'required|min:8'
       ];

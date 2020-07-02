@@ -14,7 +14,7 @@ use Validator;
 class AuthController extends Controller
 {
     //
-    private $apiToken;
+  private $apiToken;
   public function __construct()
   {
    
@@ -31,10 +31,13 @@ class AuthController extends Controller
     ];
     $validator = Validator::make($request->all(), $rules);
     if ($validator->fails()) {
-     
-      return response()->json([
-        'message' => $validator->messages(),
-      ]);
+    
+      return $this->sendError($validator->messages());
+
+      // return response()->json([
+      //   'message' => $validator->messages(),
+      // ]);
+    
     } else {
 
       $user = User::where('email',$request->email)->first();
@@ -44,11 +47,21 @@ class AuthController extends Controller
           $login = User::where('email',$request->email)->update($userArray);
           
           if($login) {
-            return response()->json([
-              'name'         => $user->name,
-              'email'        => $user->email,
-              'access_token' => $this->apiToken,
-            ]);
+      
+            $userReturn = [
+              'name'      => $user->name,
+              'email'     => $user->email,
+              'api_token' => $this->apiToken,
+              'profile' => $user->profile
+            ];
+            return $this->sendResponse($userReturn, 'loggedin Successfully');
+      
+            // return response()->json([
+            //   'name'         => $user->name,
+            //   'email'        => $user->email,
+            //   'access_token' => $this->apiToken,
+            // ]);
+
           }
         } else {
           return response()->json([
@@ -75,9 +88,10 @@ class AuthController extends Controller
     ];
     $validator = Validator::make($request->all(), $rules);
     if ($validator->fails()) {
-      return response()->json([
-        'message' => $validator->messages(),
-      ]);
+      
+      return $this->sendError($validator->messages());       
+
+    
     } else {
       
       $file_name =  str_replace(' ','_',$request->name).".".$request->profile->getClientOriginalExtension();
@@ -92,22 +106,30 @@ class AuthController extends Controller
         'profile' => $file_name
       ];
 
-      
+      $userReturn = [
+        'name'      => $request->name,
+        'email'     => $request->email,
+        'api_token' => $this->apiToken,
+        'profile' => $file_name
+      ];
+ 
    
      
       $user = User::create($userArray);
-  
      
-
       if($user) {
-        return response()->json([
-          'name'         => $request->name,
-          'email'        => $request->email,
-          'access_token' => $this->apiToken,
-          'profile' => $file_name
-        ]);
+        return $this->sendResponse($userReturn, 'User Registered Successfully.');
+        
+        // return response()->json([
+        //   'name'         => $request->name,
+        //   'email'        => $request->email,
+        //   'access_token' => $this->apiToken,
+        //   'profile' => $file_name
+        // ]);
+
       } else {
-        return response()->json([
+  
+      return response()->json([
           'message' => 'Registration failed, please try again.',
         ]);
       }
