@@ -52,9 +52,12 @@ public function CreateUser(Request $request)
       ];
       $validator = Validator::make($request->all(), $rules);
       if ($validator->fails()) {
-        return response()->json([
-          'message' => $validator->messages(),
-        ]);
+  
+        return $this->sendError($validator->messages());  
+        // return response()->json([
+        //   'message' => $validator->messages(),
+        // ]);
+  
       } else {
         $userArray = [
           'name'      => $request->name,
@@ -69,11 +72,16 @@ public function CreateUser(Request $request)
             $data = [
                 'name'         => $request->name,
                 'email'        => $request->email,
+                'api_token' => $this->apiToken  
             ];
-          return response()->json([
-                'data' => $data,
-                'message' => 'user created Success fully'
-          ]);
+
+
+          return $this->sendResponse($data, 'loggedin Successfully');
+
+            // return response()->json([
+          //       'data' => $data,
+          //       'message' => 'user created Success fully'
+          // ]);
         } else {
           return response()->json([
             'message' => 'Registration failed, please try again.',
@@ -83,7 +91,19 @@ public function CreateUser(Request $request)
 
 }
 
+public function GetUserById($id)
+{
 
+  $user =  User::find($id);
+
+  if($user){
+
+    return $this->sendResponse($user, 'User Retrieved Successfully.');
+
+  }else{
+    return $this->sendResponse($user, 'user not found');
+   }
+}
 
 
 
