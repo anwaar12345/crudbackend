@@ -76,7 +76,7 @@ public function CreateUser(Request $request)
             ];
 
 
-          return $this->sendResponse($data, 'loggedin Successfully');
+          return $this->sendResponse($data, 'User Created Successfully');
 
             // return response()->json([
           //       'data' => $data,
@@ -113,7 +113,9 @@ public function UpdateUser(Request $request,$id)
       'email'    => 'required',
       'password' => 'required|min:8',
     ];
+
     $validator = Validator::make($request->all(), $rules);
+    
     if ($validator->fails()) {
       
       return $this->sendError($validator->messages());       
@@ -134,8 +136,14 @@ public function UpdateUser(Request $request,$id)
         'api_token' => $this->apiToken,
       ];
  
-      $user = User::where('id',$id)->update($userArray);
+    //check email exists
+
+    $email =  User::where('id','!=',$id)->where('email', $request->email)->get()->pluck('email');   
+    
+    if($email->count() == 0){
      
+      $user = User::where('id',$id)->update($userArray);
+
       if($user) {
         return $this->sendResponse($userReturn, 'User Updated Successfully.');
       } else {
@@ -143,6 +151,15 @@ public function UpdateUser(Request $request,$id)
           'message' => 'Failed, please try again.',
         ]);
       }
+     }else{
+      return response()->json([
+        'message' => 'Email Already Exists',
+      ]);
+     }
+
+      
+     
+      
 
   }
   }
