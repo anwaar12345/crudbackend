@@ -145,7 +145,8 @@ class AuthController extends Controller
    */
   public function CrudLogout(Request $request)
   {
-    $token = $request->header('Authorization');
+    $token = $request->header('api-token');
+   
     $user = User::where('api_token',$token)->first();
     if($user) {
       $userArray = ['api_token' => null];

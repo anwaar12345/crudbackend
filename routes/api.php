@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signup','API\AuthController@CrudRegister');
 Route::post('/login','API\AuthController@CrudLogin');
-
+Route::post('/logout', 'API\AuthController@CrudLogout');
 
 Route::middleware('ApiToken')->group(function () {
 

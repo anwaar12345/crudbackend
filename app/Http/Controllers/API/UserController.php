@@ -111,7 +111,6 @@ public function UpdateUser(Request $request,$id)
    $rules = [
       'name'     => 'required|min:3',
       'email'    => 'required',
-      'password' => 'required|min:8',
     ];
 
     $validator = Validator::make($request->all(), $rules);
@@ -126,7 +125,6 @@ public function UpdateUser(Request $request,$id)
       $userArray = [
         'name'      => $request->name,
         'email'     => $request->email,
-        'password'  => Hash::make($request->password),
         'api_token' => $this->apiToken
       ];
 
